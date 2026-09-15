@@ -64,6 +64,7 @@ function Index() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const lightboxImage = lightboxIndex === null ? undefined : gallery[lightboxIndex];
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -280,11 +281,11 @@ function Index() {
         </div>
       </footer>
 
-      {lightboxIndex !== null && (
+      {lightboxIndex !== null && lightboxImage && (
         <div className="fixed inset-0 z-[60] grid place-items-center bg-primary/95 p-4 text-primary-foreground" role="dialog" aria-modal="true" aria-label="Image gallery">
           <Button variant="ghost" size="icon" className="absolute right-4 top-4 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground" onClick={() => setLightboxIndex(null)} aria-label="Close gallery"><X /></Button>
           <Button variant="ghost" size="icon" className="absolute left-3 top-1/2 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:left-8" onClick={() => setLightboxIndex((lightboxIndex - 1 + gallery.length) % gallery.length)} aria-label="Previous image"><ArrowLeft /></Button>
-          <img src={gallery[lightboxIndex].src} alt={gallery[lightboxIndex].alt} className="max-h-[82vh] max-w-[82vw] object-contain" />
+          <img src={lightboxImage.src} alt={lightboxImage.alt} className="max-h-[82vh] max-w-[82vw] object-contain" />
           <Button variant="ghost" size="icon" className="absolute right-3 top-1/2 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:right-8" onClick={() => setLightboxIndex((lightboxIndex + 1) % gallery.length)} aria-label="Next image"><ArrowRight /></Button>
           <p className="absolute bottom-5 text-xs tracking-[0.14em]">{lightboxIndex + 1} / {gallery.length}</p>
         </div>
